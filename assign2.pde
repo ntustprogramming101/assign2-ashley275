@@ -1,19 +1,174 @@
+/*
+   Assign 2 : Get Into Danger
+   Update : 3.27.2019
+*/
+
+final int GAME_START = 0;
+final int GAME_RUN = 1;
+final int GAME_OVER = 2;
+int gameState = GAME_START;
+
+final int SPACE_X = 80, SPACE_Y = 80;
+
+boolean downPressed, rightPressed, leftPressed;
+
+int groundhogX = SPACE_X*4, groundhogY = SPACE_Y;
+int soldierX = -SPACE_X, soldierY = floor(random(2,6))*SPACE_Y;
+int cabbageX = floor(random(2,8))*SPACE_X, cabbageY = floor(random(2,6))*SPACE_Y;
+int totalLife = 2;
+
+PImage start, startButton, startButtonHovered;
+PImage over, restartButton, restartButtonHovered;
+PImage bg, soil, life, soldier, cabbage;
+PImage groundhog, groundhogDown, groundhogLeft, groundhogRight;
+
+
 void setup() {
 	size(640, 480, P2D);
-	// Enter Your Setup Code Here
+
+  start = loadImage("img/title.jpg");
+  startButton = loadImage("img/startNormal.png");
+  startButtonHovered = loadImage("img/startHovered.png");
+  
+  over = loadImage("img/gameover.jpg");
+  restartButton = loadImage("img/restartNormal.png");
+  restartButtonHovered = loadImage("img/restartHovered.png");
+  
+  bg = loadImage("img/bg.jpg");
+  soil = loadImage("img/soil.png");
+  life = loadImage("img/life.png");
+  soldier = loadImage("img/soldier.png");
+  cabbage = loadImage("img/cabbage.png");
+  
+  groundhog = loadImage("img/groundhogIdle.png");
+  groundhogDown = loadImage("img/groundhogDown.png");
+  groundhogLeft = loadImage("img/groundhogLeft.png");
+  groundhogRight = loadImage("img/groundhogRight.png");
+  
 }
 
 void draw() {
-	// Switch Game State
-		// Game Start
+	switch( gameState ){
+		case GAME_START:
+      image( start, 0, 0 );
+      image( startButton, 248, 360 );
+      if( mouseX>248 && mouseX<248+144 && mouseY>360 && mouseY<360+60){
+        image( startButtonHovered, 248, 360 );
+        if(mousePressed){
+          gameState = GAME_RUN;
+        }
+      }
+      break;
 
-		// Game Run
+		case GAME_RUN:
+      //background image
+      image( bg, 0, 0 );
+      image( soil, 0, SPACE_Y*2 );
+      
+      //grass drawing
+      noStroke();
+      fill( 124, 204, 25 );
+      rect( 0, SPACE_Y*2-15, 640, 15);
+      
+      //sun drawing
+      noStroke();
+      fill( 255, 255, 0);
+      ellipse( 640-50, 50, 120+10, 120+10 );
+      fill( 253, 184, 19 );
+      ellipse( 640-50, 50, 120, 120 );
+      
+      //cabbage eating
+      if( groundhogX == cabbageX && groundhogY == cabbageY ){
+        totalLife += 1;
+        cabbageX = 640;
+      }else{
+        image( cabbage, cabbageX, cabbageY );
+      }
+      
+      //soldier walking
+      image( soldier, soldierX += 5, soldierY );
+      soldierX = soldierX % (640+SPACE_X);
+      if( soldierX<groundhogX+80 && soldierX+80>groundhogX
+       && soldierY<groundhogY+80 && soldierY+80>groundhogY ){
+        totalLife -= 1; 
+        groundhogX = SPACE_X*4;
+        groundhogY = SPACE_Y; 
+      }
+      
+      
+      //groundhog image : image width 80px
+      image( groundhog, groundhogX, groundhogY );
+      if( downPressed && groundhogY < 400 ){
+        groundhogY += 80;
+        downPressed = false;
+      }
+      if( rightPressed && groundhogX < 560){
+        groundhogX += 80;
+        rightPressed = false;
+      }
+      if( leftPressed && groundhogX > 0){
+        groundhogX -= 80;
+        leftPressed = false;
+      }
+      
+      //life image : image width 50px & space 20px
+      if( totalLife == 0 )gameState = GAME_OVER;
+      if( totalLife >= 1 ) image( life, 10, 10 ); 
+      if( totalLife >= 2 ) image( life, 10+(50+20), 10 );
+      if( totalLife >= 3 ) image( life, 10+(50+20)*2, 10 );
+      
+      break;
 
-		// Game Lose
+		case GAME_OVER:
+      image( over, 0, 0 );
+      image( restartButton, 248, 360 );
+      if( mouseX>248 && mouseX<248+144 && mouseY>360 && mouseY<360+60){
+        image( restartButtonHovered, 248, 360 );
+        if(mousePressed){
+          gameState = GAME_RUN;
+          //initializing
+          groundhogX = SPACE_X*4;
+          groundhogY = SPACE_Y;
+          soldierX = -SPACE_X;
+          soldierY = floor(random(2,6))*SPACE_Y;
+          cabbageX = floor(random(2,8))*SPACE_X;
+          cabbageY = floor(random(2,6))*SPACE_Y;
+          totalLife = 2;
+        }
+      }
+      break;
+  }
 }
 
+//arrow key determining
 void keyPressed(){
+  switch(keyCode){
+    case DOWN:
+    downPressed = true;
+    break;
+    
+    case RIGHT:
+    rightPressed = true;
+    break;
+    
+    case LEFT:
+    leftPressed = true;
+    break;
+  }
 }
 
 void keyReleased(){
+  switch(keyCode){    
+    case DOWN:
+    downPressed = false;
+    break;
+    
+    case RIGHT:
+    rightPressed = false;
+    break;
+    
+    case LEFT:
+    leftPressed = false;
+    break;
+  }
 }
