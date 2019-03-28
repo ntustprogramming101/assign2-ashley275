@@ -28,7 +28,7 @@ PImage groundhog, groundhogDown, groundhogLeft, groundhogRight;
 
 
 void setup() {
-	size(640, 480, P2D);
+  size(640, 480, P2D);
 
   start = loadImage("img/title.jpg");
   startButton = loadImage("img/startNormal.png");
@@ -52,8 +52,8 @@ void setup() {
 }
 
 void draw() {
-	switch( gameState ){
-		case GAME_START:
+  switch( gameState ){
+    case GAME_START:
       image( start, 0, 0 );
       image( startButton, 248, 360 );
       if( mouseX>248 && mouseX<248+144 && mouseY>360 && mouseY<360+60){
@@ -64,7 +64,8 @@ void draw() {
       }
       break;
 
-		case GAME_RUN:
+
+    case GAME_RUN:
       //background image
       image( bg, 0, 0 );
       image( soil, 0, SPACE_Y*2 );
@@ -204,7 +205,8 @@ void draw() {
       
       break;
 
-		case GAME_OVER:
+
+    case GAME_OVER:
       image( over, 0, 0 );
       image( restartButton, 248, 360 );
       if( mouseX>248 && mouseX<248+144 && mouseY>360 && mouseY<360+60){
