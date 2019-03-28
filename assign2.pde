@@ -194,8 +194,6 @@ void draw() {
       if( !downMoving && !rightMoving && !leftMoving ){
         image( groundhog, groundhogX, groundhogY );
       }
-      println( movingDistance );
-      //println( leftMoving );
       
       //life image : image width 50px & space 20px
       if( totalLife == 0 ) gameState = GAME_OVER;
