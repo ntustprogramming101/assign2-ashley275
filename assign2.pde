@@ -1,6 +1,6 @@
 /*
    Assign 2 : Get Into Danger
-   Update : 3.29.2019
+   Update : 4.11.2019
 */
 
 final int GAME_START = 0;
@@ -94,13 +94,15 @@ void draw() {
       
       
       //cabbage eating
-      if( cabbageX<groundhogX+80 && cabbageX+80>groundhogX
-       && cabbageY<groundhogY+80 && cabbageY+80>groundhogY ){
+      if( cabbageX+20<groundhogX+80 && cabbageX+60>groundhogX
+       && cabbageY+20<groundhogY+80 && cabbageY+60>groundhogY ){
         totalLife += 1;
         cabbageX = 640;
       }else{
         image( cabbage, cabbageX, cabbageY );
       }
+      println(groundhogY);
+      println("......"+groundhogX);
 
 
       //groundhog image : image width 80px
@@ -138,7 +140,6 @@ void draw() {
       
       ///2.moving
       distance += speed;
-      //speed = ( moving ) ? MOVING_SPEED : 0;
       if( downMoving ){
         speed = MOVING_SPEED;  
         if( distance >= 80 ){
@@ -184,7 +185,7 @@ void draw() {
  
       //soldier walking
       image( soldier, soldierX += 5, soldierY );
-      soldierX = soldierX % (640+SPACE_X);
+      if( soldierX > width+SPACE_X ) soldierX = -SPACE_X;
       if( soldierX<groundhogX+80 && soldierX+80>groundhogX
        && soldierY<groundhogY+80 && soldierY+80>groundhogY ){
         totalLife -= 1;
